@@ -429,6 +429,10 @@ Mettre en cache les réponses pour :
 ### Setup initial (une seule fois)
 
 1. **Forker le repository** sur GitHub : https://github.com/voidagency/stages-fullstack-challenge.git
+
+   > [!IMPORTANT]
+   > Rendez votre fork **privé** et ajoutez **admin[at]void[dot]fr** comme collaborateur (lecture seule) via Settings > Collaborators.
+
 2. **Cloner votre fork** :
    ```bash
    git clone https://github.com/VOTRE-USERNAME/stages-fullstack-challenge.git

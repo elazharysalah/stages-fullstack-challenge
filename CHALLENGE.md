@@ -123,6 +123,10 @@ Les tickets couvrent :
 
 Cliquez sur le bouton **"Fork"** en haut à droite.
 
+> [!IMPORTANT]
+> Votre fork doit être **privé**. Ajoutez **admin[at]void[dot]fr** comme collaborateur (lecture seule).
+> Un fork public = candidature annulée.
+
 ### 1. Setup de l'environnement
 
 ```bash
