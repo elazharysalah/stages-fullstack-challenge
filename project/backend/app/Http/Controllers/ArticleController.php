@@ -8,12 +8,10 @@ use Illuminate\Support\Facades\DB;
 
 class ArticleController extends Controller
 {
-    /**
-     * Display a listing of articles.
-     */
+ 
     public function index(Request $request)
     {
-        $articles = Article::all();
+        $articles = Article::with('author')->withCount('comments')->get();
 
         $articles = $articles->map(function ($article) use ($request) {
             if ($request->has('performance_test')) {
@@ -25,7 +23,7 @@ class ArticleController extends Controller
                 'title' => $article->title,
                 'content' => substr($article->content, 0, 200) . '...',
                 'author' => $article->author->name,
-                'comments_count' => $article->comments->count(),
+                'comments_count' => $article->comments_count, // Utilise l'attribut pré-calculé par withCount
                 'published_at' => $article->published_at,
                 'created_at' => $article->created_at,
             ];
