@@ -63,6 +63,10 @@ class ArticleController extends Controller
 
     /**
      * Search articles.
+     * 
+     * Utilise Eloquent ORM avec whereRaw et bindings pour :
+     * - Protection contre les injections SQL (paramètres échappés)
+     * - Recherche insensible aux accents (COLLATE utf8mb4_0900_ai_ci)
      */
     public function search(Request $request)
     {
@@ -72,23 +76,23 @@ class ArticleController extends Controller
             return response()->json([]);
         }
 
-        $articles = DB::select(
-            "SELECT * FROM articles 
-             WHERE title COLLATE utf8mb4_0900_ai_ci LIKE ? 
-                OR content COLLATE utf8mb4_0900_ai_ci LIKE ?",
-            ['%' . $query . '%', '%' . $query . '%']
-        );
+        // Utilisation d'Eloquent avec whereRaw pour la collation accent-insensitive
+        // Les paramètres sont automatiquement échappés (protection injection SQL)
+        $searchTerm = '%' . $query . '%';
+        
+        $articles = Article::whereRaw(
+            "title COLLATE utf8mb4_0900_ai_ci LIKE ? OR content COLLATE utf8mb4_0900_ai_ci LIKE ?",
+            [$searchTerm, $searchTerm]
+        )->get();
 
-        $results = array_map(function ($article) {
+        return response()->json($articles->map(function ($article) {
             return [
                 'id' => $article->id,
                 'title' => $article->title,
                 'content' => substr($article->content, 0, 200),
                 'published_at' => $article->published_at,
             ];
-        }, $articles);
-
-        return response()->json($results);
+        }));
     }
 
     /**
