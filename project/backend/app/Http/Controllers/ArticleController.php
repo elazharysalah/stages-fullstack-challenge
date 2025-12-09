@@ -73,7 +73,10 @@ class ArticleController extends Controller
         }
 
         $articles = DB::select(
-            "SELECT * FROM articles WHERE title LIKE '%" . $query . "%'"
+            "SELECT * FROM articles 
+             WHERE title COLLATE utf8mb4_0900_ai_ci LIKE ? 
+                OR content COLLATE utf8mb4_0900_ai_ci LIKE ?",
+            ['%' . $query . '%', '%' . $query . '%']
         );
 
         $results = array_map(function ($article) {
