@@ -16,8 +16,11 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 # Install PHP extensions
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
-RUN echo "upload_max_filesize = 2M" > /usr/local/etc/php/conf.d/uploads.ini \
-    && echo "post_max_size = 2M" >> /usr/local/etc/php/conf.d/uploads.ini
+# Configuration PHP pour uploads jusqu'à 20MB
+RUN echo "upload_max_filesize = 20M" > /usr/local/etc/php/conf.d/uploads.ini \
+    && echo "post_max_size = 21M" >> /usr/local/etc/php/conf.d/uploads.ini \
+    && echo "memory_limit = 256M" >> /usr/local/etc/php/conf.d/uploads.ini \
+    && echo "max_execution_time = 120" >> /usr/local/etc/php/conf.d/uploads.ini
 
 # Get latest Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -31,8 +34,8 @@ COPY . /var/www/html
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Enable Apache mod_rewrite
-RUN a2enmod rewrite
+# Enable Apache mod_rewrite and mod_headers
+RUN a2enmod rewrite headers
 
 # Configure Apache
 RUN echo '<VirtualHost *:80>\n\

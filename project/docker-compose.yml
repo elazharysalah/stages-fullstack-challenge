@@ -11,6 +11,7 @@ services:
       - "8000:80"
     volumes:
       - ./backend:/var/www/html
+      - ./backend/docker/php/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
     environment:
       - DB_HOST=mysql
       - DB_PORT=3306
