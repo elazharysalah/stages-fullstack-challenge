@@ -43,6 +43,22 @@ class User extends Authenticatable
     ];
 
     /**
+     * Hash le mot de passe automatiquement lors de l'assignation.
+     * 
+     *
+     * @param string $value
+     * @return void
+     */
+    public function setPasswordAttribute($value)
+    {
+        if (!empty($value) && !str_starts_with($value, '$2y$')) {
+            $this->attributes['password'] = bcrypt($value);
+        } else {
+            $this->attributes['password'] = $value;
+        }
+    }
+
+    /**
      * Get the articles for the user.
      */
     public function articles()
