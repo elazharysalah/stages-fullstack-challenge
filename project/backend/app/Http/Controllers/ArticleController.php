@@ -24,6 +24,7 @@ class ArticleController extends Controller
                 'content' => substr($article->content, 0, 200) . '...',
                 'author' => $article->author->name,
                 'comments_count' => $article->comments_count, // Utilise l'attribut pré-calculé par withCount
+                'image_path' => $article->image_path,
                 'published_at' => $article->published_at,
                 'created_at' => $article->created_at,
             ];
